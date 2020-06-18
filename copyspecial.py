@@ -7,7 +7,7 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 
 # give credits
-__author__ = "???"
+__author__ = "peyton glover got help from coaches"
 
 import re
 import os
@@ -19,18 +19,32 @@ import argparse
 
 def get_special_paths(dirname):
     """Given a dirname, returns a list of all its special files."""
-    # your code here
-    return
+    path_list = []
+    pattern = re.compile(r'__(.+?)__')
+    for path in os.listdir(dirname):
+        fullpath = os.path.abspath(path)
+        if pattern.search(fullpath):
+            path_list.append(fullpath)
+    print('\n'.join(path_list))
+    return '\n'.join(path_list)
 
 
 def copy_to(path_list, dest_dir):
     # your code here
-    return
+    os.makedirs(dest_dir)
+    for files in path_list:
+        shutil.copy(files, dest_dir)
 
 
 def zip_to(path_list, dest_zip):
     # your code here
-    return
+    abspaths = '\n'.join(path_list)
+    print(
+        """Command im going to do:
+        zip -j """ + dest_zip + ' ' + abspaths
+    )
+    for path in path_list:
+        subprocess.Popen(['zip', '-j', dest_zip, path])
 
 
 def main(args):
@@ -39,6 +53,7 @@ def main(args):
     parser = argparse.ArgumentParser()
     parser.add_argument('--todir', help='dest dir for special files')
     parser.add_argument('--tozip', help='dest zipfile for special files')
+    parser.add_argument('--from_dir', help='name of dir to search')
     # TODO: add one more argument definition to parse the 'from_dir' argument
     ns = parser.parse_args(args)
 
@@ -51,6 +66,18 @@ def main(args):
     # exit(1).
 
     # Your code here: Invoke (call) your functions
+    to_dir = ns.todir
+    to_zip = ns.tozip
+    from_dir = ns.from_dir
+
+    if from_dir:
+        path_list = get_special_paths(from_dir)
+    elif to_dir:
+        path_list = get_special_paths(from_dir).split('\n')
+        copy_to(path_list, to_dir)
+    elif to_zip:
+        path_list = get_special_paths(from_dir).split('\n')
+        zip_to(path_list, to_zip)
 
 
 if __name__ == "__main__":
