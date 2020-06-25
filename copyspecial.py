@@ -27,7 +27,6 @@ def get_special_paths(dirname):
     return path_list
 
 
-
 def copy_to(path_list, dest_dir):
     """Copies files in path_list to new destination"""
     # your code here
@@ -48,7 +47,6 @@ def zip_to(path_list, dest_zip):
     except subprocess.CalledProcessError as e:
         print(e.output)
         raise
-
 
 
 def main(args):
@@ -80,7 +78,6 @@ def main(args):
     to_zip = ns.tozip
     from_dir = ns.from_dir
     path_list = get_special_paths(from_dir)
-
 
     if to_dir:
         copy_to(path_list, to_dir)
